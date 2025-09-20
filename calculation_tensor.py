@@ -135,3 +135,5 @@ torch.normal(1, 0.1, (2,3))
 # torch.view()
 data = torch.arange(0,10,dtype=torch.float32).view(-1,2)
 print(data.shape)       # torch.Size([5, 2])
+
+# calculation of tensor and API learning
