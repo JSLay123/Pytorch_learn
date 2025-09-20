@@ -128,8 +128,10 @@ torch.normal(1, 0.1, (2,3))
 
 # rand()        [0,1)均匀分布采样
 # randint()     [min,max)
-# rand          01的正态分布，只需要传入size
-# randperm()
+# rand()        01之间的正态分布，只需要传入size
+# randperm()    返回一个随机排列
+#>>> torch. randperm(4) # tensor([2, 1, 0, 3])
 
-
-
+# torch.view()
+data = torch.arange(0,10,dtype=torch.float32).view(-1,2)
+print(data.shape)       # torch.Size([5, 2])

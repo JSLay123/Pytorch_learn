@@ -10,7 +10,7 @@ print(type(x_data), x_data.dtype) # <class 'torch.Tensor'> , 数据类型默认t
 
 # from numpy array
 # torch.from_numpy() / torch.tensor()
-np_arr = np.random.normal((2,3))
+np_arr = np.random.normal((2,3)) # 均值，方差， (size)
 print(np_arr, type(np_arr), np_arr.shape)     # [1.42991156 0.83594287] <class 'numpy.ndarray'> , (2,)
 x_data = torch.tensor(np_arr)
 print(type(x_data), x_data.dtype, x_data.shape) # <class 'torch.Tensor'> torch.float64, torch.Size([2])
@@ -21,7 +21,7 @@ x_np = torch.from_numpy(np_arr) # 同上
 # ones_like 基于已有张量的形状和数据类型，创建一个全0张量
 x_t = torch.tensor([[1,2.], [3,4]])
 x_ones = torch.ones_like(x_t)           # 含浮点则全为float
-x_rand = torch.rand_like(x_t, dtype=torch.float)
+x_rand = torch.rand_like(x_t, dtype=torch.float) # 【0,1）之间的分布
 print(x_ones, x_rand) #tensor([[1, 1],[1, 1]]) 、 tensor([[0.6135, 0.2873],[0.7122, 0.9935]])
 
 # with shape
@@ -32,7 +32,7 @@ zeros_tensor = torch.zeros(shape)
 
 # 属性
 # a.dtype, a.shape, a.device
-print(zeros_tensor.device)  # device(type='cpu')默认在cpu上创建
+print(zeros_tensor.device)  # device(type='cpu'),说明默认在cpu上创建
 
 # from cpu to gpu
 if torch.cuda.is_available():
@@ -42,8 +42,9 @@ if torch.cuda.is_available():
 # torch.is_tensor(x)
 print(torch.is_tensor(zeros_tensor)) #True
 
-# torch.is_complex() 判断是否是tensor.bool
+# torch.is_complex() 判断是否是torch.complex64或 torch.complex128
 print(torch.is_complex(zeros_tensor))
+# torch.complex(real, imag)创建复数张量
 
 # is_nonzero 是否是单一的一个张量且非0
 print(torch.is_nonzero(torch.tensor([0.0]))) # False
@@ -58,7 +59,7 @@ print(torch.numel(zeros_tensor))    # 6
 
 # range，arange
 # arange不包含end，float32，range包含start、end，float64
-a = torch.arange(5)
+a = torch.arange(5) # 常用
 print(a)           # tensor([0, 1, 2, 3, 4])
 
 r = torch.range(1,5)
