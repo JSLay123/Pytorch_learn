@@ -80,5 +80,4 @@ tensor([[1., 0., 0.],
 # torch.full(size, data), torch.full_like()
 print(torch.full((2,3), 5.6))
 
-
-
+# creating tensor and API learning
