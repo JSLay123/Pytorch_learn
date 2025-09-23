@@ -5,7 +5,7 @@ create tensor
 
 calculation of tensor
 
-build a sample model
+build a simple network model
 
 entropy、KL_Divergence、loss 
 
