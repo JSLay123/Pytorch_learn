@@ -19,4 +19,4 @@
 
 9. transformer learning
 
-10. diffution_DDPM learning
+10. diffusion_model_DDPM learning
