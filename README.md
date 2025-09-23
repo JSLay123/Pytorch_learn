@@ -1,22 +1,22 @@
 # Pytorch_learn
 深度学习基础pytorch学习记录
 
-create tensor
+1. create tensor
 
-calculation of tensor
+2. calculation of tensor
 
-build a simple network model
+3. build a simple network model
 
-entropy、KL_Divergence、loss 
+4. entropy、KL_Divergence、loss 
 
-loss_backward and autograd
+5. loss_backward and autograd
 
-some ways of normalization
+6. some ways of normalization
 
-train a network(training and testing loop)
+7. train a network(training and testing loop)
 
-save_load model or checkpoint
+8. save_load model or checkpoint
 
-transformer learning
+9. transformer learning
 
-diffution_DDPM learning
+10. diffution_DDPM learning
