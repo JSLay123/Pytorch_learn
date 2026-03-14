@@ -21,4 +21,4 @@
 
 10. diffusion_model_DDPM learning
 
-11. Flow Matching and rectified flow
+11. Flow Matching , rectified flow, and reflow
