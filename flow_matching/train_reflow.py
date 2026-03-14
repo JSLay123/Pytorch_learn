@@ -8,9 +8,12 @@ from rectified_flow_unet import Flow_Unet
 from torch.optim import Adam, AdamW
 from torch.optim.lr_scheduler import StepLR
 from rectified_flow import RectifiedFlow
+from reflow_dataset import ReflowDataset
 
+
+# 1. reflow的训练要从上一个1-rectified flow(v1.1)模型的权重作为预训练权重
 def train(config:str):
-    """训练flow matching模型
+    """训练reflow模型
 
     Args:
         config (str): yaml配置文件路径，包含以下参数：
@@ -31,33 +34,36 @@ def train(config:str):
     batch_size = config.get('batch_size', 128)
     lr_adjust_epoch = config.get('lr_adjust_epoch', 50)
     batch_print_interval = config.get('batch_print_interval', 100)
-    checkpoint_save_interval = config.get('checkpoint_save_interval', 10)
+    checkpoint_save_interval = config.get('checkpoint_save_interval', 1)
     save_path = config.get('save_path', './checkpoints')
     use_cfg = config.get('use_cfg', False)
     device = config.get('device', 'cuda')
+    # v1.2 reflow增加参数
+    lr = config.get('lr', 1e-5)
+    img_root_path = config.get('img_root_path', None)
+    noise_root_path = config.get('noise_root_path', None)
+    checkpoint_path = config.get('checkpoint_path', None)
 
     # 打印训练参数
     print('Training config:')
     print(f'base_channels: {base_channels}')
     print(f'epochs: {epochs}')
     print(f'batch_size: {batch_size}')
+    print(f'learning rate: {lr}')
     print(f'lr_adjust_epoch: {lr_adjust_epoch}')
     print(f'batch_print_interval: {batch_print_interval}')
     print(f'checkpoint_save_interval: {checkpoint_save_interval}')
     print(f'save_path: {save_path}')
-    print(f'use_Classifier-free Guidance: {use_cfg}')
+    print(f'use_cfg: {use_cfg}')
+    print(f'img_root_path: {img_root_path}')
+    print(f'noise_root_path: {noise_root_path}')
+    print(f'checkpoint_path: {checkpoint_path}')
     print(f'device: {device}')
 
     # 数据集加载
     transform = Compose([ToTensor()])   # 变成tensor的同时，增加一个维度
 
-    dataset = MNIST(
-        root='./data',
-        train=True,
-        download=True,
-        transform=transform
-    )
-
+    dataset = ReflowDataset(img_root_path, noise_root_path, transform=transform)
     dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
 
     model = Flow_Unet(base_channels=base_channels).to(device)
@@ -76,16 +82,18 @@ def train(config:str):
 
     for epoch in range(epochs):
         for batch, data in enumerate(dataloader):
-            x_1, y = data
-            t = torch.rand(x_1.size(0)) #[B,]
-            # 根据flow 生成x_0和x_1
-            x_t, x_0 = rf.create_flow(x_1, t, x_0=None)
+            x_1 = data['img']
+            print(x_1.size())
+            x_0 = data['noise']
+            y = data['label']
+            t = torch.randn(x_1.size(0))
+
+            x_t, _ = rf.create_flow(x_1, t, x_0)
 
             x_t = x_t.to(device)
             x_0 = x_0.to(device)
             x_1 = x_1.to(device)
             t = t.to(device) 
-            y = y.to(device)
 
             optimizer.zero_grad()
 
@@ -127,4 +135,4 @@ def train(config:str):
 
 
 if __name__ == '__main__':
-    train(config='./config/train_config.yaml')
+    train(config='./config/train_reflow_config.yaml')

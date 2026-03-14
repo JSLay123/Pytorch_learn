@@ -36,7 +36,7 @@ class RectifiedFlow:
         
         """
         if x_0 is None:
-            x_0 = torch.randn_like(x_1)
+            x_0 = torch.randn_like(x_1) # 来自噪声
 
         t = t.unsqueeze(1).unsqueeze(2).unsqueeze(3)
         x_t = t * x_1 + (1 - t) * x_0
