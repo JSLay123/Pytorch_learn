@@ -20,3 +20,5 @@
 9. transformer learning
 
 10. diffusion_model_DDPM learning
+
+11. Flow Matching and rectified flow
