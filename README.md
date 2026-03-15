@@ -22,3 +22,5 @@
 10. diffusion_model_DDPM learning
 
 11. Flow Matching , rectified flow, and reflow
+
+12. DiT block (adaLN)
