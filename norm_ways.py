@@ -11,7 +11,7 @@ inputx = torch.randn(batch_size, time_steps, embedding_dim)
 
 # pytorch的API实现
 batch_norm_op = torch.nn.BatchNorm1d(embedding_dim, affine=False)
-# 输入格式要求维度（N， L， C），即特征维度channel 第 1 维
+# 输入格式要求维度（N， C， L），即特征维度channel 第 1 维
 bn_y = batch_norm_op(inputx.transpose(-1,-2)).transpose(-1,-2)
 
 # 手写batch_norm

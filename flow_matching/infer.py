@@ -3,6 +3,7 @@ from rectified_flow_unet import Flow_Unet
 from rectified_flow import RectifiedFlow
 import cv2
 import os
+import numpy as np
 
 def infer(
         checkpoint_path,
@@ -87,8 +88,10 @@ def infer(
             img = x_t.detach().cpu().numpy()
             img = img[0] * 255
             img = img.astype('uint8')
-            print("DEBUG")
             cv2.imwrite(os.path.join(save_path, f'{i}.png'), img)
+            
+            if save_noise_path is not None:
+                np.save(os.path.join(save_noise_path, f'{i}.npy'), noise)
 
 if __name__ == '__main__':
     # 每个条件生成10张图像
