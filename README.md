@@ -24,3 +24,5 @@
 11. Flow Matching , rectified flow, and reflow
 
 12. DiT block (adaLN)
+
+13. LoRA finetune
