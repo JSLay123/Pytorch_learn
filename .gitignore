@@ -1,0 +1,6 @@
+.vscode
+python_learn
+
+flow_matching/data
+flow_matching/checkpoints
+flow_matching/__pycache__
