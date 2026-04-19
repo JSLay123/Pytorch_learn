@@ -1,5 +1,5 @@
-# Pytorch_learn
-深度学习基础pytorch学习记录
+# A collection of my technical notes on PyTorch and Deep Learning.  
+(Continuously learning...)
 
 1. create tensor
 
