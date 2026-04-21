@@ -216,7 +216,117 @@ a, b, c = numbers   # a=1, b=2, c=3
 # 如果变量的数量与列表中的元素数量不匹配，会导致ValueError异常
 # a, b = numbers   # ValueError: too many values to unpack (expected 2)
 # 使用*运算符来解包列表，可以将剩余的元素收集到一个新的列表中
+# *n代表一个新的小列表
 numbers = [1, 2, 3, 4, 5]
 a, b, *rest = numbers   # a=1, b=2, rest=[3, 4, 5]
-# 也可以将列表中的元素解包到函数的参数中
-def add(x: int, y: int) -> int:
+
+# 16.list的迭代-----------------------------------------------------------------------------------
+# 迭代就是遍历
+numbers = [1, 2, 3, 4, 5]
+for indx, num in enumerate(numbers):   # enumerate()函数返回一个迭代器，生成一个包含索引和值的元组
+    print(indx, num)   # 0 1, 1 2, 2 3, 3 4, 4 5
+# enumerate()函数还可以接受一个start参数，用于指定索引的起始值，默认是0
+for indx, num in enumerate(numbers, start=1):
+    print(indx, num)   # 1 1, 2 2, 3 3, 4 4, 5 5
+
+# 迭代器iterator是一个实现了迭代协议的对象，迭代协议包括__iter__()方法和__next__()方法，迭代器可以被用来迭代一个可迭代对象，比如列表、元组、字符串等
+# 迭代器的常用函数：iter()、next()等
+numbers = [1, 2, 3, 4, 5]
+iterator = iter(numbers)   # 创建一个迭代器对象
+print(next(iterator))   # 1
+print(next(iterator))   # 2
+print(next(iterator))   # 3
+print(next(iterator))   # 4
+print(next(iterator))   # 5
+# 当迭代器没有更多的元素可供迭代时，next()函数会抛出StopIteration异常，表示迭代结束了
+try:
+    print(next(iterator))   # StopIteration异常
+except StopIteration:       
+    print("迭代结束了")
+
+# 用for循环访问迭代器，for循环会自动调用iter()函数来获取一个迭代器对象，并在每次迭代时调用next()函数来获取下一个元素，直到迭代器没有更多的元素可供迭代时，for循环会自动捕获StopIteration异常并结束循环
+numbers = [1, 2, 3, 4, 5]
+iterator = iter(numbers)
+for i in iterator:
+    print(i)    # 1 2 3 4 5
+
+# 17.map()函数------------------------------------------------------------------------------------
+# map()函数通过遍历可迭代对象中的每个元素，并将其作为参数传递给指定的函数来生成一个新的迭代器
+# iterator = map(function, list)
+numbers = [1, 2, 3, 4, 5]
+squared_numbers = map(lambda x: x ** 2, numbers)   # <map object at 0x7f8c8c8c8c8c>
+# 对迭代器直接list()函数来转换成列表
+squared_numbers_list = list(squared_numbers)   # [1, 4, 9, 16, 25]
+# map()函数也可以接受多个可迭代对象作为参数，这些可迭代对象的元素会被并行传递给指定的函数
+numbers1 = [1, 2, 3]
+numbers2 = [4, 5, 6]
+summed_numbers = map(lambda x, y: x + y, numbers1, numbers2)   # <map object at 0x7f8c8c8c8c8c>
+summed_numbers_list = list(summed_numbers)   # [5, 7, 9]
+
+# 18.filter()函数------------------------------------------------------------------------------------
+# filter()函数用来过滤可迭代对象中的元素，留下符合要求的元素，返回一个新的迭代器，这个迭代器包含了所有使指定函数返回True的元素
+# iterator = filter(function, list)，不改变原列表，返回一个新的迭代器
+numbers = [1, 2, 3, 4, 5]
+even_numbers = filter(lambda x: x % 2 == 0, numbers)   # <filter object at 0x7f8c8c8c8c8c>
+even_numbers_list = list(even_numbers)   # [2, 4]
+# filter()函数也可以接受多个可迭代对象作为参数，这些可迭代对象的元素会被并行传递给指定的函数，只有当指定的函数对所有传递的元素都返回True时，这些元素才会被包含在返回的迭代器中
+numbers1 = [1, 2, 3]
+numbers2 = [4, 5, 6]
+filtered_numbers = filter(lambda x, y: x % 2 == 0 and y % 2 == 0, numbers1, numbers2)   # <filter object at 0x7f8c8c8c8c8c>
+filtered_numbers_list = list(filtered_numbers)   # [2]
+
+# 19.reduce()函数------------------------------------------------------------------------------------
+# reduce()函数用来对一个可迭代对象中的元素进行累积操作，返回一个单一的结果，这个结果是通过对可迭代对象中的元素依次应用指定的函数来计算得到的
+# reduce()函数需要从functools模块中导入
+from functools import reduce
+numbers = [1, 2, 3, 4, 5]
+product = reduce(lambda x, y: x * y, numbers)   # 120，相当于 (((1 * 2) * 3) * 4) * 5
+# reduce()函数也可以接受一个可选的初始值作为第三个参数，如果提供了初始值，那么这个初始值会被用作第一次调用指定函数时的第一个参数，而可迭代对象中的第一个元素会被用作第二个参数
+product_with_initial = reduce(lambda x, y: x * y, numbers, 10)   # 1200，初始值10乘以列表中的所有元素   
+
+# 20.列表解析--------------------------------------------------------------------------------------
+# 列表解析是对一个列表进行操作来生成新列表的过程
+# 列表解析的语法：new_list = [expression for item in iterable if condition]
+# expression是一个表达式，item是一个变量，iterable是一个可迭代对象，condition是一个可选的条件表达式
+numbers = [1, 2, 3, 4, 5]
+squared_numbers = [x ** 2 for x in numbers]   # [1, 4, 9, 16, 25]
+# 列表解析也可以包含一个条件表达式，用于过滤元素，只有当条件表达式返回True时，元素才会被包含在生成的新列表中
+even_squared_numbers = [x ** 2 for x in numbers if x % 2 == 0]   # [4, 16]
+# 列表解析还可以包含多个for子句和if子句，用于生成更复杂的列表
+matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+flattened = [num for row in matrix for num in row]   # [1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+# 21.字典 dict-------------------------------------------------------------------------------------
+# dict是一个无序的可变容器，可以存储任意类型的键值对，定义时使用花括号{}，键值对之间用逗号分隔，键和值之间用冒号:分隔
+person = {"name": "Alice", "age": 30, "city": "New York"}
+# dict的常用操作：
+# 访问字典中的值：通过键来访问对应的值，如果键不存在会抛出KeyError异常，可以使用get()方法来避免这个问题，get()方法会返回一个默认值，如果键不存在的话
+name = person["name"]   # "Alice"
+age = person.get("age", 0)   # 30，如果键"age"不存在，则返回默认值0
+# 添加或修改字典中的键值对：直接通过键来赋值，如果键不存在则添加一个新的键值对，如果键已经存在则修改对应的值
+person["email"] = "alice@example.com"   # 添加一个新的键值对
+person["age"] = 31   # 修改已经存在的键值对
+# 删除字典中的键值对：使用del语句或者pop()方法，del语句会直接删除指定的键值对，如果键不存在会抛出KeyError异常
+# pop()方法会删除指定的键值对并返回对应的值，如果键不存在会抛出KeyError异常，可以提供一个默认值来避免这个问题
+del person["city"]   # 删除键值对"city": "New York"
+email = person.pop("email", "No email")   # 删除键值对"email": "alice@example.com"，并返回对应的值。不存在则返回默认值"No email"
+
+# 22.字典解析---------------------------------------------------------------------------------------
+# 字典解析是对一个字典进行操作来生成新字典的过程
+# new_dict={key:value for key, value in iterable if condition}
+numbers = [1, 2, 3, 4, 5]
+squared_dict = {x: x ** 2 for x in numbers}   # {1: 1, 2: 4, 3: 9, 4: 16, 5: 25}
+# 字典解析也可以包含一个条件表达式，用于过滤元素，只有当条件表达式返回True时，元素才会被包含在生成的新字典中
+even_squared_dict = {x: x ** 2 for x in numbers if x % 2 == 0}   # {2: 4, 4: 16}
+# 字典解析还可以包含多个for子句和if子句，用于生成更复杂的字典
+matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+flattened_dict = {num: num ** 2 for row in matrix for num in row}  
+
+# 字典的合并
+dict1 = {"a": 1, "b": 2}
+dict2 = {"b": 3, "c": 4}
+# 使用update()方法来合并字典，dict1会被修改，dict2不变
+dict1.update(dict2)   # dict1变成{"a": 1, "b": 3, "c": 4}
+# 使用字典解包来合并字典，生成一个新的字典，原来的字典不变
+# 如果有相同的键，后面的字典会覆盖前面的字典中的键值对
+merged_dict = {**dict1, **dict2}   # merged_dict是{"a": 1, "b": 3, "c": 4}，dict1和dict2不变
