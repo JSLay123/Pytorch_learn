@@ -330,3 +330,83 @@ dict1.update(dict2)   # dict1变成{"a": 1, "b": 3, "c": 4}
 # 使用字典解包来合并字典，生成一个新的字典，原来的字典不变
 # 如果有相同的键，后面的字典会覆盖前面的字典中的键值对
 merged_dict = {**dict1, **dict2}   # merged_dict是{"a": 1, "b": 3, "c": 4}，dict1和dict2不变
+
+# 23.set集合----------------------------------------------------------------------------------------
+# set是一个无序的可变容器，可以存储任意类型的唯一元素，定义时使用花括号{}，元素之间用逗号分隔
+fruits = {"apple", "banana", "cherry"}
+# 定义一个空set集合，必须使用set()函数来创建，因为{}默认是一个空字典
+empty_set = set()
+# set的常用操作：
+# 判断元素是否在集合中：使用in运算符来判断一个元素是否在集合中，返回True或False
+print("apple" in fruits)   # True
+print("orange" in fruits)  # False
+# 添加元素到集合中：使用add()方法来添加一个元素到集合中，如果元素已经存在于集合中，则不会有任何效果
+fruits.add("orange")   # 添加一个新的元素"orange"到集合中
+fruits.add("apple")    # "apple"已经存在于集合中，所以不会有任何效果
+# 从集合中删除元素：使用remove()方法来删除一个元素，如果元素不存在于集合中会抛出KeyError异常
+# 可以使用discard()方法来避免这个问题，discard()方法会删除一个元素，如果元素不存在于集合中则不会有任何效果
+fruits.remove("banana")   # 删除元素"banana"从集合中
+fruits.discard("grape")   # "grape"不存在于集合中，所以不会有任何效果
+
+# frozenset是一个不可变的set集合，定义时使用frozenset()函数来创建，传入一个可迭代对象作为参数，例如：list、tuple、set等
+immutable_fruits = frozenset(["apple", "banana", "cherry"])
+# frozenset对象不支持add()、remove()等修改集合的方法，但支持set的其他方法和操作，比如union()、intersection()、difference()等
+
+
+# 24.set的解析、运算----------------------------------------------------------------------------------------
+# set解析是对一个可迭代对象进行操作来生成新set集合的过程
+# new_set = {expression for item in iterable if condition}
+numbers = [1, 2, 3, 4, 5]
+squared_set = {x ** 2 for x in numbers}   # {1, 4, 9, 16, 25}
+# set解析也可以包含一个条件表达式，用于过滤元素，只有当条件表达式返回True时，元素才会被包含在生成的新set集合中
+even_squared_set = {x ** 2 for x in numbers if x % 2 == 0}   # {4, 16}
+# set解析还可以包含多个for子句和if子句，用于生成更复杂的set集合
+matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+flattened_set = {num for row in matrix for num in row}   # {1, 2, 3, 4, 5, 6, 7, 8, 9}
+
+# 25.set的集合运算-------------------------------------------------------------------------------------------
+# 使用union()方法来计算两个集合的并集，原集合不变，返回一个新的集合，包含了两个集合中的所有元素，重复的元素只会出现一次
+set1 = {1, 2, 3}
+set2 = {3, 4, 5}
+union_set = set1.union(set2)   # {1, 2, 3, 4, 5}
+# union()可以适用于list、tuple等可迭代对象，返回一个新的集合
+union_set = set1.union([4, 5, 6])   # {1, 2, 3, 4, 5, 6}
+# | 运算符也可以用来计算两个集合的并集，但是要求两个操作数必须都是集合类型，不能是其他可迭代对象，否则会抛出TypeError异常
+union_set = set1 | set2   # {1, 2, 3, 4, 5}
+
+# 使用intersection()方法来计算两个集合的交集，原集合不变，返回一个新的集合，包含了两个集合中都存在的元素
+intersection_set = set1.intersection(set2)   # {3}
+# & 运算符也可以用来计算两个集合的交集，但是要求两个操作数必须都是集合类型，不能是其他可迭代对象，否则会抛出TypeError异常
+intersection_set = set1 & set2   # {3}
+
+# 使用difference()方法来计算两个集合的差集，原集合不变，返回一个新的集合，包含了在第一个集合中但不在第二个集合中的元素
+difference_set = set1.difference(set2)   # {1, 2}
+# - 运算符也可以用来计算两个集合的差集，但是要求两个操作数必须都是集合类型，不能是其他可迭代对象，否则会抛出TypeError异常
+difference_set = set1 - set2   # {1, 2}
+
+# 使用symmetric_difference()方法来计算两个集合的对称差集，原集合不变，返回一个新的集合，包含了在第一个集合中但不在第二个集合中，或者在第二个集合中但不在第一个集合中的元素
+symmetric_difference_set = set1.symmetric_difference(set2)   # {1, 2, 4, 5}
+# ^ 运算符也可以用来计算两个集合的对称差集，但是要求两个操作数必须都是集合类型，不能是其他可迭t对象，否则会抛出TypeError异常
+symmetric_difference_set = set1 ^ set2   # {1, 2, 4, 5}
+
+# 子集判断：issubset()方法用来判断一个集合是否是另一个集合的子集, issuperset()方法用来判断一个集合是否是另一个集合的超集
+is_subset = set1.issubset(set2)   # False
+is_superset = set1.issuperset(set2)   # False 
+
+# 26.异常处理---------------------------------------------------------------------------------------------
+# （1）什么是异常：异常是指在程序运行过程中发生的错误情况，异常会导致程序的正常执行被中断，并抛出一个异常对象，包含了错误的类型和相关的信息
+# （2）异常的类型：Python内置了很多异常类型，比如ValueError、TypeError、KeyError、IndexError、ZeroDivisionError等，每种异常类型都表示一种特定的错误情况
+# （3）异常的处理：使用try-except语句来处理异常，try块中的代码是可能会引发异常的代码， 如果在try块中发生了异常，程序会立即跳转到except块来处理这个异常，
+#                   except块中的代码会根据异常的类型来执行相应的处理逻辑，如果没有匹配到的except块，异常会继续向上传递，直到被捕获或者导致程序崩溃
+try:
+    num = int(input("请输入一个数字: "))
+    result = 10 / num
+    print(f"结果是: {result}")
+except ValueError as e:
+    print("输入的不是一个有效的数字，请重新输入。" + 'error message: ' + str(e))
+except ZeroDivisionError as e:
+    print("除数不能为零，请重新输入。" + 'error message: ' + str(e)) 
+else:
+    print("没有发生异常，程序正常执行。")
+finally:
+    print("无论是否发生异常，都会执行的代码。")
